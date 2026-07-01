@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docu-Flow Master Formatter v3 — Production Stable</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .heading-font { font-family: 'Lexend', sans-serif; }
+        
+        /* Strict House Styles rules applied directly via CSS injector namespaces */
+        .house-style-content h1 {
+            font-family: 'Lexend', sans-serif;
+            font-size: 17pt !important;
+            font-weight: 800 !important;
+            background-color: #1155CC !important;
+            color: #ffffff !important;
+            padding: 12px !important;
+            margin-top: 24px !important;
+            margin-bottom: 16px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            border-radius: 4px;
+            display: block;
+        }
+        .house-style-content h2 {
+            font-family: 'Lexend', sans-serif;
+            font-size: 14pt !important;
+            font-weight: 700 !important;
+            color: #1155CC !important;
+            margin-top: 20px !important;
+            margin-bottom: 12px !important;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 4px;
+            display: block;
+        }
+        .house-style-content p {
+            font-family: 'Arial', sans-serif;
+            font-size: 12pt !important;
+            line-height: 1.6 !important;
+            text-align: justify !important;
+            margin-bottom: 16px !important;
+        }
+        .house-style-content ul {
+            list-style-type: none !important;
+            padding-left: 8px !important;
+            margin-bottom: 16px !important;
+        }
+        .house-style-content li {
+            font-family: 'Arial', sans-serif;
+            font-size: 12pt !important;
+            position: relative;
+            padding-left: 20px !important;
+            margin-bottom: 8px !important;
+        }
+        .house-style-content li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #1155CC;
+            font-weight: bold;
+        }
+        .house-style-content table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-top: 20px !important;
+            margin-bottom: 20px !important;
+            font-size: 11pt !important;
+        }
+        .house-style-content th {
+            background-color: #eff6ff !important;
+            color: #1155CC !important;
+            font-weight: 700 !important;
+            border: 1px solid #cbd5e1 !important;
+            padding: 10px !important;
+        }
+        .house-style-content td {
+            border: 1px solid #e2e8f0 !important;
+            padding: 10px !important;
+        }
+        
+        /* Print rules specific to the real PDF compiling down-generator */
+        @media print {
+            body * { visibility: hidden; }
+            #document_preview_canvas, #document_preview_canvas * { visibility: visible; }
+            #document_preview_canvas { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+
+    <div id="text_format_bubble" class="hidden absolute z-50 bg-slate-950 border border-slate-700 p-1.5 rounded-xl shadow-2xl flex items-center space-x-1 animate-in fade-in zoom-in duration-100">
+        <button onclick="applySelectionFormat('H1')" class="px-2.5 py-1 text-xs font-bold font-mono bg-blue-600 hover:bg-blue-500 rounded text-white transition">H1</button>
+        <button onclick="applySelectionFormat('H2')" class="px-2.5 py-1 text-xs font-bold font-mono bg-indigo-600 hover:bg-indigo-500 rounded text-white transition">H2</button>
+        <div class="h-4 w-[1px] bg-slate-800 mx-1"></div>
+        <button onclick="applySelectionFormat('bold')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Bold"><i data-lucide="bold" class="w-3.5 h-3.5"></i></button>
+        <button onclick="applySelectionFormat('italic')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Italic"><i data-lucide="italic" class="w-3.5 h-3.5"></i></button>
+        <button onclick="applySelectionFormat('underline')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Underline"><i data-lucide="underline" class="w-3.5 h-3.5"></i></button>
+        <div class="h-4 w-[1px] bg-slate-800 mx-1"></div>
+        <button onclick="applySelectionFormat('p')" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 rounded text-slate-300 transition" title="Reset to normal paragraph text">Clear</button>
+    </div>
+
+    <nav class="h-20 flex items-center justify-between px-8 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/60 sticky top-0 z-50 shrink-0">
+        <div class="flex items-center space-x-4">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="file-check-2" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+                <span class="heading-font font-extrabold text-xl tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">DOCU-FLOW</span>
+                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold text-xs px-2 py-0.5 rounded-full ml-2">v3 Robust Stable</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-3 bg-slate-800/40 border border-slate-700/40 rounded-full py-1.5 pl-4 pr-2.5">
+                <span class="text-sm font-medium text-slate-300">Workspace User</span>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500 flex items-center justify-center text-xs font-bold text-slate-950 shadow-sm">USR</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <section class="lg:col-span-7 space-y-8">
+            <div class="space-y-2">
+                <h2 class="heading-font text-4xl font-extrabold text-white tracking-tight leading-tight">
+                    Redesign & Edit Reports <br><span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">to Corporate House Style</span>
+                </h2>
+                <p class="text-slate-400 max-w-xl text-base">
+                    Supports Word (`.docx`) or Text (`.txt`) files. Drag your file in, then type inside the preview window or select text to format instantly.
+                </p>
+            </div>
+
+            <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-4 backdrop-blur-sm">
+                <div class="flex items-center space-x-2 mb-4 px-2">
+                    <span class="w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-xs">1</span>
+                    <h3 class="heading-font font-bold text-slate-200">Upload Source Document</h3>
+                </div>
+                <div id="upload_dropzone" onclick="triggerFileBrowser()" class="relative cursor-pointer border-2 border-dashed border-slate-700 hover:border-blue-500/80 rounded-xl p-10 text-center transition-all duration-300 bg-slate-900/40 hover:bg-slate-800/30 group">
+                    <input accept=".docx,.txt" class="hidden" id="file_input" type="file" onchange="processIncomingFile(this)">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                        <div id="upload_icon_wrapper" class="p-4 bg-slate-800 border border-slate-700 text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 rounded-2xl transition-colors duration-300 shadow-inner">
+                            <i data-lucide="upload-cloud" class="h-8 w-8"></i>
+                        </div>
+                        <div class="space-y-1" id="upload_text_container">
+                            <p class="text-lg font-semibold text-slate-200 group-hover:text-white transition-colors">Drag and drop your report here, or <span class="text-blue-400 font-medium underline group-hover:text-blue-300">browse</span></p>
+                            <p class="text-xs text-slate-500">Supports Word (.docx) or Plain Text (.txt) formats</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-6 backdrop-blur-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <span class="w-6 h-6 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-xs">2</span>
+                            <h3 class="heading-font font-bold text-slate-200">Document Background</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">Change the dynamic background color wrapper of your layout canvas sheets preview.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-2.5">
+                        <button onclick="changeCanvasBackground('#ffffff', 'text-slate-900')" class="flex flex-col items-center gap-1.5 p-2 bg-slate-900/60 border border-slate-700/60 rounded-xl hover:border-slate-500 transition group">
+                            <div class="w-full h-8 bg-white border border-slate-200 rounded-lg shadow-sm"></div>
+                            <span class="text-[10px] font-medium text-slate-400 group-hover:text-white">Corporate</span>
+                        </button>
+                        <button onclick="changeCanvasBackground('#f8fafc', 'text-slate-900')" class="flex flex-col items-center gap-1.5 p-2 bg-slate-900/60 border border-slate-700/60 rounded-xl hover:border-slate-500 transition group">
+                            <div class="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg shadow-sm"></div>
+                            <span class="text-[10px] font-medium text-slate-400 group-hover:text-white">Alabaster</span>
+                        </button>
+                        <button onclick="changeCanvasBackground('#f4f4f0', 'text-slate-900')" class="flex flex-col items-center gap-1.5 p-2 bg-slate-900/60 border border-slate-700/60 rounded-xl hover:border-slate-500 transition group">
+                            <div class="w-full h-8 bg-[#f4f4f0] border border-stone-300 rounded-lg shadow-sm"></div>
+                            <span class="text-[10px] font-medium text-slate-400 group-hover:text-white">Sepia Tone</span>
+                        </button>
+                        <button onclick="changeCanvasBackground('#1e293b', 'text-slate-100')" class="flex flex-col items-center gap-1.5 p-2 bg-slate-900/60 border border-slate-700/60 rounded-xl hover:border-slate-500 transition group">
+                            <div class="w-full h-8 bg-slate-800 border border-slate-700 rounded-lg shadow-sm"></div>
+                            <span class="text-[10px] font-medium text-slate-400 group-hover:text-white">Dark Mode</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/40 border border-slate-800 rounded-2xl p-6 backdrop-blur-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs">3</span>
+                            <h3 class="heading-font font-bold text-slate-200">Target Output Format</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">Choose your target extension format variant package to initialize native downloads down.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="relative flex items-center p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 cursor-pointer hover:bg-slate-800/50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                            <input type="radio" name="export_extension_target" value="word" class="sr-only" checked />
+                            <i data-lucide="file-text" class="w-4 h-4 text-blue-400 mr-2.5"></i>
+                            <span class="text-xs font-semibold text-slate-200">Word (.docx)</span>
+                        </label>
+                        <label class="relative flex items-center p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 cursor-pointer hover:bg-slate-800/50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                            <input type="radio" name="export_extension_target" value="pdf" class="sr-only" />
+                            <i data-lucide="file-down" class="w-4 h-4 text-red-400 mr-2.5"></i>
+                            <span class="text-xs font-semibold text-slate-200">Adobe PDF</span>
+                        </label>
+                        <label class="relative flex items-center p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 cursor-pointer hover:bg-slate-800/50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                            <input type="radio" name="export_extension_target" value="txt" class="sr-only" />
+                            <i data-lucide="file-digit" class="w-4 h-4 text-amber-400 mr-2.5"></i>
+                            <span class="text-xs font-semibold text-slate-200">Plain (.txt)</span>
+                        </label>
+                        <label class="relative flex items-center p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 cursor-pointer hover:bg-slate-800/50 has-[:checked]:border-blue-500 holiday checked]:bg-blue-500/5 transition">
+                            <input type="radio" name="export_extension_target" value="html" class="sr-only" />
+                            <i data-lucide="code" class="w-4 h-4 text-purple-400 mr-2.5"></i>
+                            <span class="text-xs font-semibold text-slate-200">Web (.html)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="executeEnginePipelineDownload()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 transition-all transform active:scale-[0.99] cursor-pointer">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                <span class="heading-font tracking-wide">RUN ENGINE & EXPORT COMPLIANT REPORT</span>
+            </button>
+        </section>
+
+        <section class="lg:col-span-5 space-y-4 h-full flex flex-col">
+            <div class="flex items-between justify-between px-2">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="eye" class="w-4 h-4 text-blue-400"></i>
+                    <h3 class="heading-font font-bold text-sm uppercase tracking-wider text-slate-400">Live House Style Rule Preview</h3>
+                </div>
+                <span class="text-[11px] bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-slate-400 font-mono">WYSIWYG INTERACTIVE</span>
+            </div>
+
+            <div id="document_preview_canvas" class="house-style-content flex-1 w-full min-h-[580px] bg-white text-slate-900 p-8 rounded-2xl shadow-2xl border border-slate-800/80 transition-all duration-300 overflow-y-auto max-h-[660px]" contenteditable="true">
+                <div id="canvas_placeholder_fallback" class="h-full flex flex-col items-center justify-center text-center p-6 py-20 text-slate-400" contenteditable="false">
+                    <i data-lucide="file-text" class="w-12 h-12 mb-3 text-slate-300 opacity-60"></i>
+                    <p class="text-sm font-medium">No document active.</p>
+                    <p class="text-xs max-w-xs mt-1">Upload a plain text file or Word document to test live design conversions and highlighting features.</p>
+                </div>
+                <div id="canvas_rendered_payload" class="hidden"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="h-12 bg-slate-950 border-t border-slate-900 text-slate-500 flex items-center justify-between px-8 text-[11px] font-mono shrink-0">
+        <div class="flex items-center space-x-2">
+            <span id="system_status_dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="system_status_text">SYS_READY: v3_ENGINE_STABLE // WAITING FOR UPLOAD</span>
+        </div>
+        <div class="flex space-x-6">
+            <span>CPU: <strong class="text-slate-300">14%</strong></span>
+            <span>MEM: <strong class="text-slate-300">0.3GB</strong></span>
+            <span>LATENCY: <strong class="text-slate-300">1ms</strong></span>
+        </div>
+    </footer>
+
+    <script>
+        // Start Lucide Icon vectors elements engine injection
+        lucide.createIcons();
+
+        let loadedDocumentRawText = "";
+        let loadedDocumentHTMLPayload = "";
+        let uploadedFileNameString = "transformed_house_style_report";
+
+        // Drag and drop events setup listeners directly onto targeted container wrappers
+        const dropzone = document.getElementById('upload_dropzone');
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-blue-500', 'bg-slate-800/60');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-blue-500', 'bg-slate-800/60');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            const fileInput = document.getElementById('file_input');
+            fileInput.files = files;
+            processIncomingFile(fileInput);
+        });
+
+        function triggerFileBrowser() {
+            document.getElementById('file_input').click();
+        }
+
+        // TEXT INTERACTION RANGE DETECTION HIGHLIGHTING SETUP
+        const canvasContainer = document.getElementById('document_preview_canvas');
+        const formatBubble = document.getElementById('text_format_bubble');
+
+        canvasContainer.addEventListener('mouseup', handleTextSelectionCheck);
+        canvasContainer.addEventListener('keyup', handleTextSelectionCheck);
+        
+        // Close toolbar bubble if clicking out
+        document.addEventListener('mousedown', function(e) {
+            if (!formatBubble.contains(e.target) && !canvasContainer.contains(e.target)) {
+                formatBubble.classList.add('hidden');
+            }
+        });
+
+        function handleTextSelectionCheck() {
+            const currentSelection = window.getSelection();
+            if (currentSelection.isCollapsed || currentSelection.toString().trim() === "") {
+                formatBubble.classList.add('hidden');
+                return;
+            }
+
+            const selectionRange = currentSelection.getRangeAt(0);
+            const boundingBox = selectionRange.getBoundingClientRect();
+
+            // Render style highlighter bubble position calculation parameters
+            formatBubble.classList.remove('hidden');
+            formatBubble.style.top = `${boundingBox.top + window.scrollY - 45}px`;
+            formatBubble.style.left = `${boundingBox.left + window.scrollX + (boundingBox.width / 2) - (formatBubble.offsetWidth / 2)}px`;
+        }
+
+        function applySelectionFormat(commandActionType) {
+            if (commandActionType === 'H1' || commandActionType === 'H2' || commandActionType === 'p') {
+                document.execCommand('formatBlock', false, `<${commandActionType}>`);
+            } else {
+                document.execCommand(commandActionType, false, null);
+            }
+            // Hide formatting popover bubble menu element
+            formatBubble.classList.add('hidden');
+        }
+
+        // Hybrid file system selector (Processes real word documents AND raw text files)
+        function processIncomingFile(inputElement) {
+            if (!inputElement.files || !inputElement.files[0]) return;
+            
+            const selectedFile = inputElement.files[0];
+            uploadedFileNameString = selectedFile.name.replace(/\.[^/.]+$/, ""); 
+            
+            // UI Visual updates
+            document.getElementById('upload_icon_wrapper').className = "p-4 bg-emerald-950/40 border border-emerald-800 text-emerald-400 rounded-2xl transition-colors shadow-inner";
+            document.getElementById('upload_text_container').innerHTML = `
+                <p class="text-lg font-semibold text-emerald-400">✓ Document Loaded Successfully</p>
+                <p class="text-xs text-slate-300 font-mono bg-slate-900/80 px-3 py-1.5 rounded border border-slate-700/50 inline-block mt-1">${selectedFile.name}</p>
+            `;
+            
+            document.getElementById('system_status_text').innerText = "SYS_PARSING: GENERATING HOUSE STYLE COMPLIANCE ARRAYS...";
+            document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+
+            const fileReader = new FileReader();
+
+            if (selectedFile.name.endsWith('.txt')) {
+                fileReader.onload = function(e) {
+                    const rawTextContent = e.target.result;
+                    loadedDocumentRawText = rawTextContent;
+                    
+                    let structuredHTML = rawTextContent.split('\n').map(line => {
+                        let trimmed = line.trim();
+                        if (!trimmed) return '';
+                        if (trimmed.startsWith('1.0') || trimmed.startsWith('2.0')) {
+                            return `<h1>${trimmed}</h1>`;
+                        } else if (trimmed.startsWith('1.1') || trimmed.startsWith('2.1')) {
+                            return `<h2>${trimmed}</h2>`;
+                        } else if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+                            return `<ul><li>${trimmed.replace(/^[•-]\s*/, '')}</li></ul>`;
+                        } else {
+                            return `<p>${trimmed}</p>`;
+                        }
+                    }).join('');
+
+                    displayRenderedOutputOnCanvas({ value: structuredHTML });
+                };
+                fileReader.readAsText(selectedFile);
+            } else {
+                // Robust Fallback Word Engine Core
+                fileReader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    
+                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                        .then(displayRenderedOutputOnCanvas)
+                        .catch(function(err) {
+                            console.warn("Primary parser bottleneck encountered. Launching direct text layout generator matrix fallback workflow...", err);
+                            
+                            mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                                .then(function(result) {
+                                    loadedDocumentRawText = result.value;
+                                    let fallbackHTML = loadedDocumentRawText.split('\n')
+                                        .map(line => line.trim())
+                                        .filter(line => line.length > 0)
+                                        .map(line => `<p>${line}</p>`)
+                                        .join('');
+                                        
+                                    displayRenderedOutputOnCanvas({ value: fallbackHTML });
+                                })
+                                .catch(function() {
+                                    alert("Unable to process document. The architecture data structure signature inside this Word file is corrupted.");
+                                });
+                        });
+
+                    mammoth.extractRawText({ arrayBuffer: arrayBuffer }).then(r => loadedDocumentRawText = r.value).catch(()=>{});
+                };
+                fileReader.readAsArrayBuffer(selectedFile);
+            }
+        }
+
+        function displayRenderedOutputOnCanvas(result) {
+            loadedDocumentHTMLPayload = result.value;
+            
+            document.getElementById('canvas_placeholder_fallback').classList.add('hidden');
+            const targetRenderContainer = document.getElementById('canvas_rendered_payload');
+            targetRenderContainer.classList.remove('hidden');
+
+            // Formats table arrays cleanly if present
+            let standardizedHTML = loadedDocumentHTMLPayload
+                .replace(/<table/g, '<table class="w-full border-collapse border border-slate-300 my-4"')
+                .replace(/<th/g, '<th class="border border-slate-300 p-2 bg-blue-50 text-[#1155CC] font-bold"')
+                .replace(/<td/g, '<td class="border border-slate-300 p-2 text-slate-700"');
+
+            targetRenderContainer.innerHTML = standardizedHTML;
+            canvasContainer.innerHTML = standardizedHTML;
+            
+            document.getElementById('system_status_text').innerText = "SYS_READY: LAYOUT CONVERSION COMPLETE // ENGINE READY TO DOWNLOAD";
+            document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-blue-400 animate-pulse";
+        }
+
+        function changeCanvasBackground(hexColorCode, textVisibilityNamespace) {
+            canvasContainer.style.backgroundColor = hexColorCode;
+            canvasContainer.style.color = (textVisibilityNamespace === 'text-slate-100') ? '#f8fafc' : '#0f172a';
+        }
+
+        function executeEnginePipelineDownload() {
+            if (!canvasContainer.innerHTML || canvasContainer.innerHTML.includes('canvas_placeholder_fallback')) {
+                alert("Please drop or browse a text file first!");
+                return;
+            }
+
+            const targetExportFormat = document.querySelector('input[name="export_extension_target"]:checked').value;
+            document.getElementById('system_status_text').innerText = `SYS_EXPORTING: PACKAGING OUTBOUND AS [. ${targetExportFormat.toUpperCase()}] ...`;
+            document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-purple-500 animate-spin";
+
+            setTimeout(() => {
+                const embeddedStyleElement = document.getElementsByTagName('style')[0].outerHTML;
+                
+                if (targetExportFormat === 'html') {
+                    const fullHTMLDocumentSource = `<html><head><meta charset="utf-8">${embeddedStyleElement}</head><body style="padding:40px; background:${canvasContainer.style.backgroundColor || '#ffffff'};">${canvasContainer.innerHTML}</body></html>`;
+                    triggerClientBlobDownload(fullHTMLDocumentSource, 'text/html', `${uploadedFileNameString}_corporate_layout.html`);
+                } else if (targetExportFormat === 'txt') {
+                    triggerClientBlobDownload(canvasContainer.innerText, 'text/plain', `${uploadedFileNameString}_clean.txt`);
+                } else if (targetExportFormat === 'word') {
+                    const wordDocLayoutSource = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset="utf-8">${embeddedStyleElement}</head><body style="padding:30px;">${canvasContainer.innerHTML}</body></html>`;
+                    triggerClientBlobDownload(wordDocLayoutSource, 'application/msword', `${uploadedFileNameString}_house_style.docx`);
+                } else if (targetExportFormat === 'pdf') {
+                    window.print();
+                }
+                
+                document.getElementById('system_status_text').innerText = "SYS_READY: PACKAGING SUCCESSFULLY ACCOMPLISHED";
+                document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+            }, 800);
+        }
+
+        function triggerClientBlobDownload(contentBuffer, mimeTypeNamespace, targetOutputFilename) {
+            const dataBlobInstance = new Blob([contentBuffer], { type: mimeTypeNamespace });
+            const temporaryAnchorElement = document.createElement('a');
+            temporaryAnchorElement.href = URL.createObjectURL(dataBlobInstance);
+            temporaryAnchorElement.download = targetOutputFilename;
+            document.body.appendChild(temporaryAnchorElement);
+            temporaryAnchorElement.click();
+            document.body.removeChild(temporaryAnchorElement);
+        }
+    </script>
+</body>
+</html>
