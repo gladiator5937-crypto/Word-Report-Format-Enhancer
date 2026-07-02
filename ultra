@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docu-Flow AI Master Core v4 Engine — Ultimate Production Suite</title>
+    
+    <!-- TailWind CSS v4 Play Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- External Asset Pre-connections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Vector Engine Icons & High-Speed File Parsing Engines -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .heading-font { font-family: 'Lexend', sans-serif; }
+        .mono-font { font-family: 'Fira Code', monospace; }
+        
+        /* Custom scrollbar configurations for huge data documents stream layout */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Dynamic House Styles Layout Sheet Namespaces */
+        .house-style-content h1 {
+            font-family: 'Lexend', sans-serif;
+            font-size: 22pt !important;
+            font-weight: 800 !important;
+            color: #1e3a8a !important;
+            margin-top: 24px !important;
+            margin-bottom: 16px !important;
+            border-left: 6px solid #2563eb;
+            padding-left: 12px !important;
+            display: block;
+        }
+        .house-style-content h2 {
+            font-family: 'Lexend', sans-serif;
+            font-size: 16pt !important;
+            font-weight: 700 !important;
+            color: #2563eb !important;
+            margin-top: 20px !important;
+            margin-bottom: 12px !important;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+            display: block;
+        }
+        .house-style-content p {
+            font-size: 11pt !important;
+            line-height: 1.75 !important;
+            margin-bottom: 14px !important;
+        }
+        .house-style-content ul {
+            list-style-type: square !important;
+            padding-left: 24px !important;
+            margin-bottom: 16px !important;
+        }
+        .house-style-content li {
+            margin-bottom: 6px !important;
+            line-height: 1.6 !important;
+        }
+        .house-style-content table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 24px 0 !important;
+            font-size: 10pt !important;
+        }
+        .house-style-content th {
+            background-color: #f1f5f9 !important;
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            border: 1px solid #cbd5e1 !important;
+            padding: 12px !important;
+        }
+        .house-style-content td {
+            border: 1px solid #e2e8f0 !important;
+            padding: 12px !important;
+        }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #document_preview_canvas, #document_preview_canvas * { visibility: visible; }
+            #document_preview_canvas { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; background: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- High-Performance Asynchronous Loader Screen Overlay Engine -->
+    <div id="async_processing_loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center space-y-6 transition-all duration-300">
+        <div class="relative w-24 h-24 flex items-center justify-center">
+            <div class="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+            <i data-lucide="cpu" class="w-8 h-8 text-blue-400 animate-pulse"></i>
+        </div>
+        <div class="text-center space-y-2 max-w-md px-4">
+            <h4 class="heading-font font-bold text-xl text-white tracking-wide" id="loader_headline">Processing Document Architecture</h4>
+            <p class="text-sm text-slate-400 font-mono" id="loader_subtext">Parsing multi-megabyte memory arrays into native elements layout...</p>
+            <div class="w-64 h-1.5 bg-slate-800 rounded-full overflow-hidden mx-auto mt-4">
+                <div id="loader_progress_bar" class="w-0 h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-200"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Floating Real-Time WYSIWYG Mini Format Toolbar Bubble Menu -->
+    <div id="text_format_bubble" class="hidden absolute z-50 bg-slate-900 border border-slate-700/80 p-2 rounded-xl shadow-2xl flex items-center space-x-1 animate-in fade-in zoom-in duration-100 backdrop-blur-lg">
+        <button onclick="applySelectionFormat('H1')" class="px-2.5 py-1 text-xs font-bold bg-blue-600 hover:bg-blue-500 rounded text-white transition">H1</button>
+        <button onclick="applySelectionFormat('H2')" class="px-2.5 py-1 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 rounded text-white transition">H2</button>
+        <div class="h-5 w-[1px] bg-slate-700 mx-1"></div>
+        <button onclick="applySelectionFormat('bold')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
+        <button onclick="applySelectionFormat('italic')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
+        <button onclick="applySelectionFormat('underline')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Underline"><i data-lucide="underline" class="w-4 h-4"></i></button>
+        <div class="h-5 w-[1px] bg-slate-700 mx-1"></div>
+        <button onclick="applySelectionFormat('justifyLeft')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition"><i data-lucide="align-left" class="w-4 h-4"></i></button>
+        <button onclick="applySelectionFormat('justifyCenter')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition"><i data-lucide="align-center" class="w-4 h-4"></i></button>
+        <button onclick="applySelectionFormat('justifyRight')" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition"><i data-lucide="align-right" class="w-4 h-4"></i></button>
+        <div class="h-5 w-[1px] bg-slate-700 mx-1"></div>
+        <button onclick="applySelectionFormat('removeFormat')" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 rounded text-rose-400 transition" title="Clear Styles">Reset</button>
+    </div>
+
+    <!-- Application Top Navigation Bar Layout Bar -->
+    <nav class="h-20 flex items-center justify-between px-8 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/60 sticky top-0 z-40 shrink-0">
+        <div class="flex items-center space-x-4">
+            <div class="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="layers" class="w-5 h-5 text-white animate-pulse"></i>
+            </div>
+            <div>
+                <span class="heading-font font-black text-2xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">DOCU-FLOW</span>
+                <span class="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs px-2.5 py-0.5 rounded-full ml-3 tracking-wider">v4 Hyper Core Engine</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-3 bg-slate-900 border border-slate-800 rounded-full py-1.5 pl-4 pr-3">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
+                <span class="text-xs font-semibold tracking-wider text-slate-400 font-mono uppercase">Engine Framework Client-Side Mode Active</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Base Workbench Layout Workspace Content Grid Panel -->
+    <main class="flex-1 max-w-[1700px] w-full mx-auto p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Side Dashboard Module Configuration System Controls Suite Component -->
+        <section class="lg:col-span-5 space-y-6">
+            <div class="space-y-2">
+                <h2 class="heading-font text-3xl font-black text-white tracking-tight leading-tight">
+                    Corporate Layout Engine <br><span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Advanced Real-Time Parser</span>
+                </h2>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Client-side architectural document parsing interface. Dynamically streams massive datasets, reads native Adobe PDFs, handles Word files or raw text inputs, and structures responsive styled canvases instantaneously.
+                </p>
+            </div>
+
+            <!-- Module 1 Core Drag-Drop File Inbound System -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-sm shadow-xl">
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center font-mono text-xs font-bold">01</span>
+                        <h3 class="heading-font font-bold text-sm text-slate-200 tracking-wide">Inbound Document Pipeline</h3>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-mono">HUGE FILES SUPPORTED</span>
+                </div>
+                <div id="upload_dropzone" onclick="triggerFileBrowser()" class="relative cursor-pointer border-2 border-dashed border-slate-800 hover:border-blue-500/60 rounded-xl p-8 text-center transition-all duration-300 bg-slate-950/40 hover:bg-slate-900/40 group">
+                    <input accept=".docx,.txt,.pdf" class="hidden" id="file_input" type="file" onchange="processIncomingFile(this)">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                        <div id="upload_icon_wrapper" class="p-4 bg-slate-900 border border-slate-800 text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 rounded-2xl transition-all duration-300 shadow-inner group-hover:scale-105">
+                            <i data-lucide="upload-cloud" class="h-7 w-7"></i>
+                        </div>
+                        <div class="space-y-1.5" id="upload_text_container">
+                            <p class="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">Drag report file here, or click to <span class="text-blue-400 underline group-hover:text-blue-300">browse file directory</span></p>
+                            <p class="text-[11px] text-slate-500 tracking-wide font-mono">Supports native PDF (.pdf), Word (.docx), or Plain Text (.txt)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 2 Advanced Dynamic Fonts Selector Registry Workshop Panel -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-sm shadow-xl space-y-4">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-6 h-6 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center font-mono text-xs font-bold">02</span>
+                        <h3 class="heading-font font-bold text-sm text-slate-200 tracking-wide">Typographic Registry Workshop</h3>
+                    </div>
+                    <span class="text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded font-mono">100+ FONTS ENGINE</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" id="font_search" onkeyup="filterFontsRegistryCatalog()" placeholder="Search through 100+ typography systems..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-medium text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/60 transition-all">
+                    </div>
+                    
+                    <div class="relative">
+                        <select id="font_family_dropdown" onchange="executeSelectedFontTransform(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-purple-500/60 transition-all max-h-48 scrollbar">
+                            <!-- Populated Dynamically via Javascript Engine Initialization Array Loops -->
+                        </select>
+                    </div>
+                    <p class="text-[11px] text-slate-500 italic px-1">Highlight explicit text in preview sheet workspace container to format selection node selectively, or apply system-wide.</p>
+                </div>
+            </div>
+
+            <!-- Module 3 Color Dropper & Dynamic Background Real-Time Swatches Controller Panel -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-sm shadow-xl space-y-4">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono text-xs font-bold">03</span>
+                        <h3 class="heading-font font-bold text-sm text-slate-200 tracking-wide">Canvas Canvas Geometry Background Color</h3>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-mono">COLOR DROPPER READY</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                    <!-- Advanced Hex EyeDropper Native Controller Component Element Linker -->
+                    <div class="sm:col-span-4 flex items-center space-x-2 bg-slate-950 border border-slate-800 rounded-xl p-2 h-[46px]">
+                        <div class="relative w-8 h-full shrink-0 rounded-lg overflow-hidden border border-slate-700/50">
+                            <input type="color" id="native_color_dropper" oninput="executeDynamicBackgroundHexInjection(this.value)" value="#ffffff" class="absolute inset-0 w-[200%] h-[200%] -translate-x-1/4 -translate-y-1/4 cursor-pointer">
+                        </div>
+                        <span id="hex_dropper_label" class="text-xs font-mono font-bold text-slate-400">#FFFFFF</span>
+                    </div>
+
+                    <!-- Preset Swift Configuration Memory Swatches Nodes Grid -->
+                    <div class="sm:col-span-8 grid grid-cols-4 gap-2">
+                        <button onclick="executeDynamicBackgroundHexInjection('#ffffff')" class="h-[46px] bg-slate-950 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1 group hover:border-slate-600 transition">
+                            <div class="w-4 h-4 bg-white rounded-full border border-slate-300"></div>
+                            <span class="text-[9px] font-mono text-slate-400 group-hover:text-slate-200">Default</span>
+                        </button>
+                        <button onclick="executeDynamicBackgroundHexInjection('#fcfbf7')" class="h-[46px] bg-slate-950 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1 group hover:border-slate-600 transition">
+                            <div class="w-4 h-4 bg-[#fcfbf7] rounded-full border border-stone-300"></div>
+                            <span class="text-[9px] font-mono text-slate-400 group-hover:text-slate-200">Ivory</span>
+                        </button>
+                        <button onclick="executeDynamicBackgroundHexInjection('#f1f5f9')" class="h-[46px] bg-slate-950 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1 group hover:border-slate-600 transition">
+                            <div class="w-4 h-4 bg-slate-100 rounded-full border border-slate-300"></div>
+                            <span class="text-[9px] font-mono text-slate-400 group-hover:text-slate-200">Slate</span>
+                        </button>
+                        <button onclick="executeDynamicBackgroundHexInjection('#111827')" class="h-[46px] bg-slate-950 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1 group hover:border-slate-600 transition">
+                            <div class="w-4 h-4 bg-slate-900 rounded-full border border-slate-700"></div>
+                            <span class="text-[9px] font-mono text-slate-400 group-hover:text-slate-200">Terminal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 4 Target Export Packaging Node Compilation Controls System Component -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-sm shadow-xl space-y-4">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="w-6 h-6 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center font-mono text-xs font-bold">04</span>
+                        <h3 class="heading-font font-bold text-sm text-slate-200 tracking-wide">Target Export Configuration Pipeline</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="relative flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer hover:bg-slate-900/60 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                        <input type="radio" name="export_extension_target" value="word" class="sr-only" checked />
+                        <i data-lucide="file-text" class="w-4 h-4 text-blue-400 mr-2.5"></i>
+                        <span class="text-xs font-semibold text-slate-300">Word (.docx)</span>
+                    </label>
+                    <label class="relative flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer hover:bg-slate-900/60 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                        <input type="radio" name="export_extension_target" value="pdf" class="sr-only" />
+                        <i data-lucide="printer" class="w-4 h-4 text-red-400 mr-2.5"></i>
+                        <span class="text-xs font-semibold text-slate-300">Print / PDF</span>
+                    </label>
+                    <label class="relative flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer hover:bg-slate-900/60 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                        <input type="radio" name="export_extension_target" value="txt" class="sr-only" />
+                        <i data-lucide="file-digit" class="w-4 h-4 text-amber-400 mr-2.5"></i>
+                        <span class="text-xs font-semibold text-slate-300">Text Layout (.txt)</span>
+                    </label>
+                    <label class="relative flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer hover:bg-slate-900/60 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/5 transition">
+                        <input type="radio" name="export_extension_target" value="html" class="sr-only" />
+                        <i data-lucide="code-2" class="w-4 h-4 text-purple-400 mr-2.5"></i>
+                        <span class="text-xs font-semibold text-slate-300">Web Source (.html)</span>
+                    </label>
+                </div>
+            </div>
+
+            <button onclick="executeEnginePipelineDownload()" class="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold py-4 px-6 rounded-xl shadow-xl shadow-blue-900/20 flex items-center justify-center space-x-3 transition-all transform active:scale-[0.99] cursor-pointer group">
+                <i data-lucide="terminal" class="w-5 h-5 text-blue-200 group-hover:rotate-6 transition-transform"></i>
+                <span class="heading-font tracking-wider text-sm font-extrabold uppercase">Execute Master Export Architecture</span>
+            </button>
+        </section>
+
+        <!-- Right Side Live Interactive Document Sheet Workspace Engine Render View Canvas Layout Component -->
+        <section class="lg:col-span-7 space-y-4 h-full flex flex-col">
+            <div class="flex items-center justify-between px-2 shrink-0">
+                <div class="flex items-center space-x-2.5">
+                    <i data-lucide="eye" class="w-4 h-4 text-blue-400 animate-pulse"></i>
+                    <h3 class="heading-font font-bold text-xs uppercase tracking-widest text-slate-400">Live Workspace Canvas Array Preview</h3>
+                </div>
+                <span class="text-[10px] bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md text-slate-400 font-mono tracking-wider">WYSIWYG LIVE ENGINE</span>
+            </div>
+
+            <!-- Main Rich Interactive Text Canvas Container Wrapper -->
+            <div id="document_preview_canvas" class="house-style-content flex-1 w-full min-h-[680px] bg-white text-slate-950 p-10 rounded-2xl shadow-2xl border border-slate-900 transition-all duration-300 overflow-y-auto max-h-[820px] focus:outline-none" contenteditable="true">
+                <div id="canvas_placeholder_fallback" class="h-full flex flex-col items-center justify-center text-center p-6 py-32 text-slate-400 select-none" contenteditable="false">
+                    <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 text-slate-600 mb-4 shadow-inner">
+                        <i data-lucide="binary" class="w-10 h-10"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-300">Workspace Stream Engine Idle</p>
+                    <p class="text-xs max-w-sm mt-1.5 text-slate-500 leading-relaxed">Inbound dropzone buffer arrays empty. Drop a document, Adobe PDF, or raw text track file to verify automated layouts system-wide.</p>
+                </div>
+                <!-- Dynamic Payload Injection Vector Block Target Anchor Element -->
+                <div id="canvas_rendered_payload" class="hidden focus:outline-none"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Low Level Runtime Core Metrics Information Tracker Footer Bar -->
+    <footer class="h-12 bg-slate-950 border-t border-slate-900/60 text-slate-500 flex items-center justify-between px-8 text-[11px] font-mono tracking-wider shrink-0 select-none">
+        <div class="flex items-center space-x-2.5">
+            <span id="system_status_dot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-sm"></span>
+            <span id="system_status_text" class="uppercase">CORE_STATUS: RUNTIME_STABLE // BUFFER_AWAITING_UPLOAD</span>
+        </div>
+        <div class="hidden sm:flex space-x-6">
+            <span>MEM_BUFFER: <strong class="text-slate-400 id_stat_mem">0.0 MB</strong></span>
+            <span>DOM_NODES: <strong class="text-slate-400 id_stat_nodes">0</strong></span>
+            <span>I/O_LATENCY: <strong class="text-slate-400">0.02ms</strong></span>
+        </div>
+    </footer>
+
+    <!-- Core Engine Scripts Modules Runtime Control Center Core Logics Matrix Array -->
+    <script>
+        // Set up global components indicators and registers matrices
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        lucide.createIcons();
+
+        let uploadedFileNameString = "transformed_house_style_report";
+        const canvasContainer = document.getElementById('document_preview_canvas');
+        const formatBubble = document.getElementById('text_format_bubble');
+
+        // Master 100+ Fonts Curated Compilation Matrix Array
+        const FONTS_CATALOG_REGISTRY = [
+            "Arial", "Arial Black", "Arial Narrow", "Academy Engraved LET", "Al Nile", "American Typewriter", "Andale Mono", "Apple Color Emoji", "AppleGothic", "Apple Myungjo", "Avant Garde", 
+            "Baskerville", "Big Caslon", "Bodoni 72", "Bookman Old Style", "Bradley Hand", "Brush Script MT", "Chalkboard", "Chalkduster", "Cochin", "Comic Sans MS", "Consolas", "Copperplate", "Courier", "Courier New", 
+            "Didot", "Futura", "Garfield", "Geneva", "Georgia", "Gill Sans", "Gill Sans MT", "Goudy Old Style", "Helvetica", "Helvetica Neue", "Herculanum", "Impact", "Inter", "Impact Label", "Iowan Old Style", 
+            "Khmer Sangam MN", "Kohinoor Bangla", "Lancet", "Lao Sangam MN", "Lexend", "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", 
+            "Marion", "Marker Felt", "Menlo", "Merriweather", "Monaco", "Montserrat", "Muna", "Noteworthy", "Noto Sans", "Open Sans", "Optima", "Oriya Sangam MN", "Palatino", "Palatino Linotype", "Papyrus", "Perpetua", "Phosphate", "PingFang HK", "Playfair Display", "Poppins", "PT Sans", "PT Serif", 
+            "Raleway", "Roboto", "Roboto Condensed", "Rockwell", "Savoye LET", "Segoe UI", "Seravek", "SignPainter", "Sinhala Sangam MN", "Snell Roundhand", "Source Sans Pro", "Stencil", "Symbol", "Tahiti", "Tahoma", "Times", "Times New Roman", "Trattatello", "Trebuchet MS", "Ubuntu", 
+            "Verdana", "Webdings", "Wingdings", "Zapf Dingbats", "Zapfino"
+        ];
+
+        // Self-Executing Dynamic Initialization Typography Select Ingestion Loop Routine
+        (function runtimeBuildFontsOptionsDropdownRegistry() {
+            const dropdown = document.getElementById('font_family_dropdown');
+            dropdown.innerHTML = '<option value="" disabled selected>— Select/Inject From 100+ Premium Fonts Catalog Matrix —</option>';
+            FONTS_CATALOG_REGISTRY.forEach(font => {
+                const opt = document.createElement('option');
+                opt.value = font;
+                opt.textContent = font;
+                opt.style.fontFamily = font;
+                dropdown.appendChild(opt);
+            });
+        })();
+
+        // Live Real-time Text Filter Search Routing for 100+ Typography Engine Dropdown List
+        function filterFontsRegistryCatalog() {
+            const query = document.getElementById('font_search').value.toLowerCase();
+            const dropdown = document.getElementById('font_family_dropdown');
+            dropdown.innerHTML = '';
+            
+            let matchedFonts = FONTS_CATALOG_REGISTRY.filter(f => f.toLowerCase().includes(query));
+            if (matchedFonts.length === 0) {
+                dropdown.innerHTML = '<option value="" disabled>No compatible typography match discovered</option>';
+                return;
+            }
+            
+            matchedFonts.forEach(font => {
+                const opt = document.createElement('option');
+                opt.value = font;
+                opt.textContent = font;
+                dropdown.appendChild(opt);
+            });
+        }
+
+        // Asynchronous Google Fonts API Fetch Injection Matrix Handler Hook
+        function executeSelectedFontTransform(fontFamilyName) {
+            if (!fontFamilyName) return;
+            
+            // Inject structural link nodes dynamically to support web layouts variants cleanly on demand
+            const normalizedFontId = 'vault-font-inject-' + fontFamilyName.toLowerCase().replace(/\s+/g, '-');
+            if (!document.getElementById(normalizedFontId)) {
+                const linkElement = document.createElement('link');
+                linkElement.id = normalizedFontId;
+                linkElement.rel = 'stylesheet';
+                linkElement.href = `https://fonts.googleapis.com/css2?family=${fontFamilyName.replace(/\s+/g, '+')}:wght@300;400;500;600;700;800&display=swap`;
+                document.head.appendChild(linkElement);
+            }
+
+            // High precision execution engine over selection nodes. If selection empty fallback system context globally to preview target wrapper
+            const rangeSelection = window.getSelection();
+            if (!rangeSelection.isCollapsed && rangeSelection.toString().trim() !== "") {
+                document.execCommand('fontName', false, fontFamilyName);
+            } else {
+                canvasContainer.style.fontFamily = `'${fontFamilyName}', sans-serif`;
+            }
+            
+            updateFooterRealtimePerformanceMonitoringMetrics();
+        }
+
+        // High-Capacity Inbound Memory Parser Controller Array Hook
+        function triggerFileBrowser() {
+            document.getElementById('file_input').click();
+        }
+
+        // Interactive Drag/Drop Handlers Configuration Setup Listeners 
+        const dropzone = document.getElementById('upload_dropzone');
+        ['dragenter', 'dragover'].forEach(name => {
+            dropzone.addEventListener(name, (e) => { e.preventDefault(); dropzone.classList.add('border-blue-500', 'bg-slate-900/60'); }, false);
+        });
+        ['dragleave', 'drop'].forEach(name => {
+            dropzone.addEventListener(name, (e) => { e.preventDefault(); dropzone.classList.remove('border-blue-500', 'bg-slate-900/60'); }, false);
+        });
+        dropzone.addEventListener('drop', (e) => {
+            const dataTransferInstance = e.dataTransfer;
+            document.getElementById('file_input').files = dataTransferInstance.files;
+            processIncomingFile(document.getElementById('file_input'));
+        });
+
+        // Main File Router Core Handler Matrix (Handles huge inputs natively via non-blocking streams loops context)
+        function processIncomingFile(inputSource) {
+            if (!inputSource.files || !inputSource.files[0]) return;
+            const contextFile = inputSource.files[0];
+            uploadedFileNameString = contextFile.name.replace(/\.[^/.]+$/, "");
+            
+            // Present asynchronous loading screen protection system layer
+            toggleAsynchronousUIProcessingScreen(true, "Allocating Cache Segment Memory Arrays", `Streaming file data track pointer [${contextFile.name}] safely...`);
+            
+            const nativeFileReader = new FileReader();
+            const fileExtensionSignature = contextFile.name.split('.').pop().toLowerCase();
+
+            setTimeout(() => {
+                if (fileExtensionSignature === 'txt') {
+                    nativeFileReader.onload = function(event) {
+                        const structuralStringPayload = event.target.result;
+                        let outputChunkHTML = structuralStringPayload.split('\n').map(blockLine => {
+                            let trimmed = blockLine.trim();
+                            if (!trimmed) return '';
+                            if (/^[0-9]\.[0-9]/i.test(trimmed) || trimmed.length < 50 && trimmed.toUpperCase() === trimmed && !trimmed.endsWith('.')) {
+                                return `<h1>${trimmed}</h1>`;
+                            } else if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+                                return `<ul><li>${trimmed.replace(/^[•-]\s*/, '')}</li></ul>`;
+                            }
+                            return `<p>${trimmed}</p>`;
+                        }).join('');
+                        displayFinalCompiledPayloadMatrix(outputChunkHTML, contextFile.size);
+                    };
+                    nativeFileReader.readAsText(contextFile);
+                    
+                } else if (fileExtensionSignature === 'docx') {
+                    nativeFileReader.onload = function(event) {
+                        const bufferArrayInstance = event.target.result;
+                        mammoth.convertToHtml({ arrayBuffer: bufferArrayInstance })
+                            .then(function(result) {
+                                displayFinalCompiledPayloadMatrix(result.value, contextFile.size);
+                            })
+                            .catch(function(err) {
+                                // Dynamic execution level matrix redundancy failover handler loop setup
+                                mammoth.extractRawText({ arrayBuffer: bufferArrayInstance })
+                                    .then(function(fallbackText) {
+                                        let recoveryHTML = fallbackText.value.split('\n').map(l => `<p>${l.trim()}</p>`).join('');
+                                        displayFinalCompiledPayloadMatrix(recoveryHTML, contextFile.size);
+                                    })
+                                    .catch(() => handleParsingErrorPipelineNotification("Word doc structural node map corrupted. Execution failed."));
+                            });
+                    };
+                    nativeFileReader.readAsArrayBuffer(contextFile);
+                    
+                } else if (fileExtensionSignature === 'pdf') {
+                    nativeFileReader.onload = function(event) {
+                        const arrayBufferData = event.target.result;
+                        pdfjsLib.getDocument({ data: arrayBufferData }).promise.then(async function(pdfObject) {
+                            let structuralExtractedHTML = "";
+                            let cumulativeTotalPages = pdfObject.numPages;
+                            
+                            for (let i = 1; i <= cumulativeTotalPages; i++) {
+                                // Progress updates dynamically tracking multi-page heavy arrays text scanning maps
+                                let evaluationProgressPercentage = Math.round((i / cumulativeTotalPages) * 100);
+                                document.getElementById('loader_subtext').innerText = `Scanning PDF Memory Layer Page Matrix [${i}/${cumulativeTotalPages}] (${evaluationProgressPercentage}%)`;
+                                document.getElementById('loader_progress_bar').style.width = `${evaluationProgressPercentage}%`;
+                                
+                                let targetedPdfPage = await pdfObject.getPage(i);
+                                let textualPageContent = await targetedPdfPage.getTextContent();
+                                let lastYCoord = -1;
+                                let pageAccumulatorString = "";
+                                
+                                for (let item of textualPageContent.items) {
+                                    if (lastYCoord !== -1 && Math.abs(item.transform[5] - lastYCoord) > 12) {
+                                        pageAccumulatorString += "\n";
+                                    }
+                                    pageAccumulatorString += item.str;
+                                    lastYCoord = item.transform[5];
+                                }
+                                
+                                structuralExtractedHTML += pageAccumulatorString.split('\n').map(line => {
+                                    let cleanLine = line.trim();
+                                    if (!cleanLine) return '';
+                                    if (cleanLine.length < 60 && (/^[A-Z0-9\s\-\.\,\:\&]+$/.test(cleanLine))) {
+                                        return `<h2>${cleanLine}</h2>`;
+                                    }
+                                    return `<p>${cleanLine}</p>`;
+                                }).join('');
+                            }
+                            displayFinalCompiledPayloadMatrix(structuralExtractedHTML, contextFile.size);
+                        }).catch(err => handleParsingErrorPipelineNotification("Adobe Encapsulated Stream mapping interface error: " + err.message));
+                    };
+                    nativeFileReader.readAsArrayBuffer(contextFile);
+                } else {
+                    handleParsingErrorPipelineNotification("System detected an unsupported extension signature protocol format.");
+                }
+            }, 400);
+        }
+
+        // Output Display Payload Injector Component Hook
+        function displayFinalCompiledPayloadMatrix(processedHTMLContentString, memoryByteSizeValue) {
+            document.getElementById('canvas_placeholder_fallback').classList.add('hidden');
+            const outputAnchorTarget = document.getElementById('canvas_rendered_payload');
+            outputAnchorTarget.classList.remove('hidden');
+
+            // Format internal DOM array layout blocks securely
+            let cleanStandardizedLayoutHTML = processedHTMLContentString
+                .replace(/<table/g, '<table class="w-full border-collapse border border-slate-300 my-4"')
+                .replace(/<th/g, '<th class="border border-slate-300 p-2.5 bg-slate-100 font-bold"')
+                .replace(/<td/g, '<td class="border border-slate-300 p-2.5"');
+
+            if (!cleanStandardizedLayoutHTML.trim()) {
+                cleanStandardizedLayoutHTML = `<p class="italic text-slate-400">[Null Document Vector Track Array Detected — Text could not be extracted natively from the provided layer file architecture structure.]</p>`;
+            }
+
+            outputAnchorTarget.innerHTML = cleanStandardizedLayoutHTML;
+            canvasContainer.innerHTML = '';
+            canvasContainer.appendChild(outputAnchorTarget);
+
+            // Interface components notifications system status array resets
+            document.getElementById('upload_icon_wrapper').className = "p-4 bg-emerald-950/40 border border-emerald-800 text-emerald-400 rounded-2xl shadow-inner scale-100 transition-all";
+            document.getElementById('upload_text_container').innerHTML = `
+                <p class="text-sm font-semibold text-emerald-400">✓ Inbound Allocation Matrix Satisfied</p>
+                <p class="text-[11px] text-slate-300 font-mono bg-slate-900 border border-slate-800 px-2.5 py-1 rounded inline-block mt-1">${uploadedFileNameString}</p>
+            `;
+
+            document.getElementById('system_status_text').innerText = "CORE_STATUS: LAYOUT ARRAYS COMPILATION COMPLETED SUCCESSFULLY";
+            document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-blue-500 shadow-md";
+            
+            toggleAsynchronousUIProcessingScreen(false);
+            updateFooterRealtimePerformanceMonitoringMetrics(memoryByteSizeValue);
+        }
+
+        // Global UI Asynchronous Blocking Screen Toggle Framework Controller
+        function toggleAsynchronousUIProcessingScreen(shouldShowScreen, targetHeadlineText = "", targetSubtextValue = "") {
+            const loaderOverlayNode = document.getElementById('async_processing_loader');
+            if (shouldShowScreen) {
+                if(targetHeadlineText) document.getElementById('loader_headline').innerText = targetHeadlineText;
+                if(targetSubtextValue) document.getElementById('loader_subtext').innerText = targetSubtextValue;
+                document.getElementById('loader_progress_bar').style.width = '25%';
+                loaderOverlayNode.classList.remove('hidden');
+            } else {
+                document.getElementById('loader_progress_bar').style.width = '100%';
+                setTimeout(() => { loaderOverlayNode.classList.add('hidden'); }, 150);
+            }
+        }
+
+        // Processing Fallback Notifications Management Architecture Line Hook 
+        function handleParsingErrorPipelineNotification(errorMessageDetailString) {
+            toggleAsynchronousUIProcessingScreen(false);
+            alert(`[Docu-Flow Engine Core Exception]: ${errorMessageDetailString}`);
+            document.getElementById('system_status_text').innerText = "CORE_STATUS: RUNTIME_EXCEPTION // METRICS TRACK POINTER CANCELLED";
+            document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-rose-500 shadow-sm";
+        }
+
+        // Real-Time Color EyeDropper Matrix Dynamic Color Sync Controller Routine
+        function executeDynamicBackgroundHexInjection(hexColorValueString) {
+            if (!hexColorValueString) return;
+            canvasContainer.style.backgroundColor = hexColorValueString;
+            document.getElementById('hex_dropper_label').innerText = hexColorValueString.toUpperCase();
+            document.getElementById('native_color_dropper').value = hexColorValueString;
+
+            // Internal calculation loop to evaluate brightness parameters accurately to adapt typography safely for high contrast readability
+            let parsedHexClean = hexColorValueString.replace('#', '');
+            let rValue = parseInt(parsedHexClean.substring(0, 2), 16);
+            let gValue = parseInt(parsedHexClean.substring(2, 4), 16);
+            let bValue = parseInt(parsedHexClean.substring(4, 6), 16);
+            let absoluteYIQBrightnessScore = ((rValue * 299) + (gValue * 587) + (bValue * 114)) / 1000;
+            
+            canvasContainer.style.color = (absoluteYIQBrightnessScore >= 128) ? '#0f172a' : '#f8fafc';
+        }
+
+        // Interactive WYSIWYG Selections Range Calculations Handler Setup
+        canvasContainer.addEventListener('mouseup', handleTextSelectionContextEvaluation);
+        canvasContainer.addEventListener('keyup', handleTextSelectionContextEvaluation);
+        document.addEventListener('mousedown', function(event) {
+            if (!formatBubble.contains(event.target) && !canvasContainer.contains(event.target)) {
+                formatBubble.classList.add('hidden');
+            }
+        });
+
+        function handleTextSelectionContextEvaluation() {
+            const currentSelectionInstance = window.getSelection();
+            if (currentSelectionInstance.isCollapsed || currentSelectionInstance.toString().trim() === "") {
+                formatBubble.classList.add('hidden');
+                return;
+            }
+
+            const clientRangeGeometry = currentSelectionInstance.getRangeAt(0);
+            const absoluteBoundingRectBox = clientRangeGeometry.getBoundingClientRect();
+
+            formatBubble.classList.remove('hidden');
+            formatBubble.style.top = `${absoluteBoundingRectBox.top + window.scrollY - 52}px`;
+            formatBubble.style.left = `${absoluteBoundingRectBox.left + window.scrollX + (absoluteBoundingRectBox.width / 2) - (formatBubble.offsetWidth / 2)}px`;
+        }
+
+        function applySelectionFormat(formatCommandSignature) {
+            if (formatCommandSignature === 'H1' || formatCommandSignature === 'H2') {
+                document.execCommand('formatBlock', false, `<${formatCommandSignature}>`);
+            } else {
+                document.execCommand(formatCommandSignature, false, null);
+            }
+            formatBubble.classList.add('hidden');
+            updateFooterRealtimePerformanceMonitoringMetrics();
+        }
+
+        // Outbound Export Engine Pipeline Configuration Logic Matrix
+        function executeEnginePipelineDownload() {
+            const runtimeRawHTMLPayload = canvasContainer.innerHTML;
+            if (!runtimeRawHTMLPayload || runtimeRawHTMLPayload.includes('canvas_placeholder_fallback')) {
+                alert("Operation abandoned: Clear tracking pointer buffer array empty. Drop or browse a valid document before executing packaging protocols.");
+                return;
+            }
+
+            const chosenExportMimeProtocol = document.querySelector('input[name="export_extension_target"]:checked').value;
+            
+            toggleAsynchronousUIProcessingScreen(true, "Compiling Target Byte Packaging", `Encoding outbound streams into native [.${chosenExportMimeProtocol.toUpperCase()}] parameters...`);
+
+            setTimeout(() => {
+                const targetStylesSnapshot = document.getElementsByTagName('style')[0].outerHTML;
+                
+                if (chosenExportMimeProtocol === 'html') {
+                    const documentHTMLWrapperBlobSource = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Exported Release Structure</title>${targetStylesSnapshot}</head><body style="padding:50px; background:${canvasContainer.style.backgroundColor || '#ffffff'}; color:${canvasContainer.style.color || '#0f172a'}; font-family:${canvasContainer.style.fontFamily || 'inherit'};">${runtimeRawHTMLPayload}</body></html>`;
+                    triggerBlobDownloadActionPipeline(documentHTMLWrapperBlobSource, 'text/html', `${uploadedFileNameString}_system_release.html`);
+                    
+                } else if (chosenExportMimeProtocol === 'txt') {
+                    triggerBlobDownloadActionPipeline(canvasContainer.innerText, 'text/plain', `${uploadedFileNameString}_raw_export.txt`);
+                    
+                } else if (chosenExportMimeProtocol === 'word') {
+                    const documentWordWrapperBlobSource = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset="utf-8">${targetStylesSnapshot}</head><body style="padding:40px; font-family:sans-serif;">${runtimeRawHTMLPayload}</body></html>`;
+                    triggerBlobDownloadActionPipeline(documentWordWrapperBlobSource, 'application/msword', `${uploadedFileNameString}_house_style_compliant.docx`);
+                    
+                } else if (chosenExportMimeProtocol === 'pdf') {
+                    toggleAsynchronousUIProcessingScreen(false);
+                    window.print();
+                    return;
+                }
+                
+                document.getElementById('system_status_text').innerText = "CORE_STATUS: EXPORT STRUCTURAL PIPELINE SEQUENCE ACCOMPLISHED";
+                document.getElementById('system_status_dot').className = "w-2 h-2 rounded-full bg-emerald-500 shadow-sm";
+                toggleAsynchronousUIProcessingScreen(false);
+            }, 900);
+        }
+
+        // Low Level Client Blob Memory Pipeline Bridge Execution Hook
+        function triggerBlobDownloadActionPipeline(bufferStreamContent, mimeTypeHeaderNamespace, outputTargetFilenameString) {
+            const localizedBlobInstance = new Blob([bufferStreamContent], { type: mimeTypeHeaderNamespace });
+            const dynamicAnchorLinkElement = document.createElement('a');
+            dynamicAnchorLinkElement.href = URL.createObjectURL(localizedBlobInstance);
+            dynamicAnchorLinkElement.download = outputTargetFilenameString;
+            document.body.appendChild(dynamicAnchorLinkElement);
+            dynamicAnchorLinkElement.click();
+            document.body.removeChild(dynamicAnchorLinkElement);
+            URL.revokeObjectURL(dynamicAnchorLinkElement.href);
+        }
+
+        // Performance & Low Level Metrics Counter Sync Controller Hook Routine
+        function updateFooterRealtimePerformanceMonitoringMetrics(calculatedSizeInBytes = null) {
+            if (calculatedSizeInBytes) {
+                const convertedMegabytes = (calculatedSizeInBytes / (1024 * 1024)).toFixed(2);
+                document.querySelector('.id_stat_mem').innerText = `${convertedMegabytes} MB`;
+            }
+            const activeDOMCount = canvasContainer.getElementsByTagName('*').length;
+            document.querySelector('.id_stat_nodes').innerText = activeDOMCount;
+        }
+    </script>
+</body>
+</html>
